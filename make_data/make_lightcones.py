@@ -1,4 +1,9 @@
 import py21cmfast as p21c
+import tools21cm as t2c
+
+from astropy.cosmology import FlatLambdaCDM
+import astropy.units as u
+cosmo = FlatLambdaCDM(H0=71 * u.km / u.s / u.Mpc, Om0=0.27)
 
 print(f"Using 21cmFAST version {p21c.__version__}")
 
@@ -27,15 +32,17 @@ def run_lightcone(fstar_10, alpha_star, fesc_10, alpha_esc, t_star, Mturn, L_X, 
     
     return lightcone
         
-def make_power_spectra(brigthness_temp, kbins=10, box_len, z_min, z_max):
+def make_power_spectra(brigthness_temp, box_len, z_min, z_max, kbins=10):
     """
     function to make a cylindrical power spectrum from a bightness temperature lightcone
     """
     z_mid = (z_min+z_max)/2
-    L_para = cosmo.comoving_distance(z_min) - cosmo.comoving_distance(z_max)
+    L_para = (cosmo.comoving_distance(z_min) - cosmo.comoving_distance(z_max)).value
     theta = box_len/cosmo.comoving_distance(z_min)
-    L_perp = cosmo.comoving_distance(z_mid) * theta_FOV 
+    L_perp = (cosmo.comoving_distance(z_mid) * theta).value
     print(L_perp)
+    
+    box_dims = [L_para,L_para,L_perp]
     
     p, k = t2c.power_spectrum_1d(brigthness_temp, kbins=kbins, box_dims=box_dims, binning =  'log', return_n_modes=False)
     
