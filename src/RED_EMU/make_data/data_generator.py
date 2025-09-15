@@ -3,7 +3,7 @@ from RED_EMU.make_data.make_lightcones import run_lightcone, make_power_spectra
 import random
 import pandas as pd
 
-def simulator(zmin, zmax, box_dim, nruns, kbins, seed=np.random.seed()):
+def simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, nruns, kbins, seed=np.random.seed()):
     save_labels = pd.DataFrame()
     save_data = np.zeros([kbins,kbins,nruns])
 
@@ -42,10 +42,8 @@ if __name__ == "__main__":
     #range to sample betweem for each astro param
     fstar10_bounds = [0.5,0.0001]
     alpha_star_bounds = [0.0,1.5]
-    Fesc10_bounds = [0.01,0.5]
-    alpha_esc_bounds = [-1.0,1.0]
     
-    ps, k = simulator(zmin, zmax, box_dim, nruns, kbins)
+    ps, k = simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, nruns, kbins)
 
 
 

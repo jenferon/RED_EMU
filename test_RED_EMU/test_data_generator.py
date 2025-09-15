@@ -21,5 +21,7 @@ def test_simulator():
         
     #run power spectra
     ps, k = make_power_spectra(delta_Tb, box_dim, zmin, zmax, kbins=kbins)
-    
-    assert(np.allclose(simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, 1, kbins, seed=4), ps, rtol=1e-6, atol=1e-8))
+    print(ps)
+    ps_test = simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, 1, kbins, seed=4)
+    print(ps_test)
+    assert(np.allclose(ps_test, ps, rtol=1e-6, atol=1e-8))
