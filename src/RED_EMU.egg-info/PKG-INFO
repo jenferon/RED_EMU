@@ -1,0 +1,24 @@
+Metadata-Version: 2.4
+Name: RED_EMU
+Version: 0.0.1
+Summary: This a 21cm power spectrum emulator which fully incorporated redshift space distortions.
+Author: Jen Feron
+Maintainer: Jen Feron
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: 21cmfast
+Requires-Dist: tools21cm
+Provides-Extra: docs
+Requires-Dist: numpydoc; extra == "docs"
+Requires-Dist: sphinx; extra == "docs"
+Requires-Dist: sphinx-book-theme; extra == "docs"
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Provides-Extra: dev
+Requires-Dist: RED_EMU[docs,test]; extra == "dev"
+
+## RED Emu
+# Redshift spacE Distortion Emulator 
+
+A code to emulate the power spectrum of a seminumerical 21cm brightness temperature simulation which fully incorporates lightcone and redshift space distortion effects.
+

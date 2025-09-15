@@ -1,6 +1,6 @@
 import numpy as np
-from make_data.make_lightcones import run_lightcone, make_power_spectra
-from make_data.data_generator import simulator 
+from RED_EMU.make_data.make_lightcones import run_lightcone, make_power_spectra
+from RED_EMU.make_data.data_generator import simulator 
 
 def test_simulator():
     fstar_10 = 0.01

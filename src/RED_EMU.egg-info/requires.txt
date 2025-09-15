@@ -1,0 +1,13 @@
+21cmfast
+tools21cm
+
+[dev]
+RED_EMU[docs,test]
+
+[docs]
+numpydoc
+sphinx
+sphinx-book-theme
+
+[test]
+pytest

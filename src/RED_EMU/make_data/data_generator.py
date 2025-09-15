@@ -1,9 +1,9 @@
 import numpy as np
-from make_data.make_lightcones import run_lightcone, make_power_spectra
+from RED_EMU.make_data.make_lightcones import run_lightcone, make_power_spectra
 import random
 import pandas as pd
 
-def simulator(zmin, zmax, box_dim, nruns, kbins):
+def simulator(zmin, zmax, box_dim, nruns, kbins, seed=np.random.seed()):
     save_labels = pd.DataFrame()
     save_data = np.zeros([kbins,kbins,nruns])
 
@@ -18,7 +18,7 @@ def simulator(zmin, zmax, box_dim, nruns, kbins):
         #make lightcone
         lightcone = run_lightcone(fstar_10=np.log10(fstar_10), alpha_star=alpha_star, fesc_10=-1.0, 
                                 alpha_esc=-0.5, t_star=0.5, Mturn=8.7, L_X=40.5, 
-                                seed=np.random.seed(), zmin=zmin, zmax=zmax, box_dim=box_dim)
+                                seed=seed, zmin=zmin, zmax=zmax, box_dim=box_dim)
         delta_Tb = lightcone.brightness_temp 
         print(delta_Tb.shape)
         
