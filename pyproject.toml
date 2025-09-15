@@ -1,0 +1,21 @@
+[project]
+name = "RED_EMU"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ "name" = "Jen Feron"}]
+maintainers = [{ "name" = "Jen Feron"}]
+
+description = 'This a 21cm power spectrum emulator which fully incorporated redshift space distortions.'
+dependencies = [
+	"21cmfast",
+	"tools21cm"
+]
+
+version = "0.0.1"
+
+[project.optional-dependencies]
+docs = ["numpydoc", "sphinx", "sphinx-book-theme"]
+test = ["pytest"]
+
+# Install for development
+dev = ["RED_EMU[docs,test]"]
