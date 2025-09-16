@@ -36,14 +36,14 @@ def make_power_spectra(brigthness_temp, box_len, z_min, z_max, kbins=10):
     """
     function to make a cylindrical power spectrum from a bightness temperature lightcone
     """
-    z_mid = (z_min+z_max)/2
+    """z_mid = (z_min+z_max)/2
     L_para = (cosmo.comoving_distance(z_min) - cosmo.comoving_distance(z_max)).value
+    
     theta = box_len/cosmo.comoving_distance(z_min)
     L_perp = (cosmo.comoving_distance(z_mid) * theta).value
-    print(L_perp)
     
-    box_dims = [L_para,L_para,L_perp]
+    box_dims = [L_perp,L_perp,L_para]"""
     
-    p, k = t2c.power_spectrum_1d(brigthness_temp, kbins=kbins, box_dims=box_dims, binning =  'log', return_n_modes=False)
+    p, k = t2c.power_spectrum_1d(brigthness_temp, kbins=kbins, binning = 'log')# quick fix but need to calculate the box dims prioperly, box_dims=box_dims, return_n_modes=False)
     
     return p, k
