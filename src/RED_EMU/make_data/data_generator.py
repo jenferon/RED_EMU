@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, nruns, kbins, seed=np.random.seed(), SAVE=True):
     save_labels = pd.DataFrame()
-    save_data = np.zeros([kbins,kbins,nruns])
+    save_data = np.zeros([nruns,kbins])
 
     for ii in range(0,nruns):
         #get astro params
@@ -26,11 +26,11 @@ def simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, nruns, kbi
         plt.savefig("/home/ppxjf3/repos/RED_EMU/test_Tb.pdf")
         #run power spectra
         ps, k = make_power_spectra(delta_Tb, box_dim, zmin, zmax, kbins=kbins)
-        save_data[:,:,ii] = ps
+        save_data[ii,:] = ps
         
     if SAVE == True:
         np.save('dataset/training_data', save_data)
-        save_labels.to_csv('dataset/training_labels', sep=',', index=False, encoding='utf-8')
+        save_labels.to_csv('dataset/training_labels.csv', sep=',', index=False, encoding='utf-8')
     
     return ps, k
 
