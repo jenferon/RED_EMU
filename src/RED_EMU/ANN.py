@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
 
 
-X = np.load('make_data/dataset/training_data.npy') #we want in shape (itter,kbins)
+X = np.load('/home/ppxjf3/repos/RED_EMU/src/RED_EMU/make_data/dataset/training_data.npy') #we want in shape (itter,kbins)
 y = pd.read_csv('make_data/dataset/training_labels.csv')  
 y = y['f* 10']
 print(X.shape)

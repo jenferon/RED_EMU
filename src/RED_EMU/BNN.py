@@ -2,7 +2,10 @@ import pyro
 import pyro.distributions as dist
 from pyro.nn import PyroModule, PyroSample
 import torch.nn as nn
-
+from pyro.infer import MCMC, NUTS
+import numpy as np
+import pandas as pd
+import torch
 
 class BNN21(PyroModule):
     def __init__(self, in_dim=3, out_dim=1, hid_dim=5, prior_scale=10.):
@@ -37,3 +40,33 @@ class BNN21(PyroModule):
         with pyro.plate("data", x.shape[0]):
             obs = pyro.sample("obs", dist.Normal(mu, sigma * sigma), obs=y)
         return mu
+    
+    
+if __name__ == "__main__":
+    #get data
+    X = np.load('/home/ppxjf3/repos/RED_EMU/src/RED_EMU/make_data/dataset/training_data.npy')[:,0] #we want in shape (itter,kbins)
+    print(X.shape)    
+    y = pd.read_csv('/home/ppxjf3/repos/RED_EMU/src/RED_EMU/make_data/dataset/training_labels.csv')
+    y_train = np.zeros([100,3]) #labels need to be in shape
+    y_train[:,0] = y['R_bubble']
+    y_train[:,1] = y['Ionising_effciency']
+    y_train[:,2] = y['T_vir(min)']
+    # Convert data to PyTorch tensors
+    x_train = torch.from_numpy(X).float()
+    y_train = torch.from_numpy(y_train).float()
+    
+    print(y_train.shape)  
+    model = BNN21()
+
+    # Set Pyro random seed
+    pyro.set_rng_seed(42)
+
+    # Define Hamiltonian Monte Carlo (HMC) kernel
+    # NUTS = "No-U-Turn Sampler" (https://arxiv.org/abs/1111.4246), gives HMC an adaptive step size
+    nuts_kernel = NUTS(model, jit_compile=False)  # jit_compile=True is faster but requires PyTorch 1.6+
+
+    # Define MCMC sampler, get 50 posterior samples
+    mcmc = MCMC(nuts_kernel, num_samples=50)
+    
+    # Run MCMC
+    mcmc.run(x_train, y_train)
