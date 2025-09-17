@@ -4,26 +4,23 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, nruns, kbins, seed=np.random.seed(), SAVE=True):
+def simulator(r_bubble, eta, Tvir, zmin, zmax, box_dim, nruns, kbins, seed=np.random.seed(), SAVE=True, PLOT=False):
     save_labels = pd.DataFrame()
     save_data = np.zeros([nruns,kbins])
 
     for ii in range(0,nruns):
-        #get astro params
-        fstar_10 = random.uniform(fstar10_bounds[0],fstar10_bounds[1])
-        alpha_star = random.uniform(alpha_star_bounds[0],alpha_star_bounds[1])
         
-        astro_params = pd.DataFrame({'f* 10':[fstar_10], 'alpha*':[alpha_star]})
+        astro_params = pd.DataFrame({'R_bubble':[r_bubble[ii]], 'Ionising_effciency':[eta[ii]], 'T_vir(min)':[Tvir[ii]]})
         save_labels =  save_labels._append(astro_params)
         
         #make lightcone
-        lightcone = run_lightcone(fstar_10=np.log10(fstar_10), alpha_star=alpha_star, fesc_10=-1.0, 
-                                alpha_esc=-0.5, t_star=0.5, Mturn=8.7, L_X=40.5, 
+        lightcone = run_lightcone(r_bubble[ii], eta[ii], Tvir[ii], 
                                 seed=seed, zmin=zmin, zmax=zmax, box_dim=box_dim)
         delta_Tb = lightcone.brightness_temp 
         print(np.mean(delta_Tb))
-        plt.imshow(delta_Tb[:,:,0])
-        plt.savefig("/home/ppxjf3/repos/RED_EMU/test_Tb.pdf")
+        if PLOT == True:
+            plt.imshow(delta_Tb[:,:,0])
+            plt.savefig("/home/ppxjf3/repos/RED_EMU/test_Tb.pdf")
         #run power spectra
         ps, k = make_power_spectra(delta_Tb, box_dim, zmin, zmax, kbins=kbins)
         save_data[ii,:] = ps
@@ -43,10 +40,11 @@ if __name__ == "__main__":
     kbins = 10
 
     #range to sample betweem for each astro param
-    fstar10_bounds = [0.5,0.0001]
-    alpha_star_bounds = [0.0,1.5]
+    r_bubble = []
+    eta = []
+    Tvir = []
     
-    ps, k = simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, 100, kbins, SAVE=True)
+    ps, k = simulator(r_bubble, eta, Tvir, zmin, zmax, box_dim, 100, kbins, SAVE=True)
     
 
 

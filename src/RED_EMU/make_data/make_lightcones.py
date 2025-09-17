@@ -7,7 +7,7 @@ cosmo = FlatLambdaCDM(H0=71 * u.km / u.s / u.Mpc, Om0=0.27)
 
 print(f"Using 21cmFAST version {p21c.__version__}")
 
-def run_lightcone(fstar_10, alpha_star, fesc_10, alpha_esc, t_star, Mturn, L_X, seed, zmin, zmax, box_dim=250,HII_DIM=128):
+def run_lightcone(r_bubble, eta, Tvir, seed, zmin, zmax, box_dim=250,HII_DIM=128):
     """
     Function to create a 21cmFast lightcone for given astrophysical parameters
     
@@ -24,8 +24,7 @@ def run_lightcone(fstar_10, alpha_star, fesc_10, alpha_esc, t_star, Mturn, L_X, 
         DIM=int(HII_DIM * 2),
     ),
     global_quantities=("brightness_temp", "density", "velocity", "xH_box"),
-    astro_params={"F_STAR10":fstar_10, "ALPHA_STAR":alpha_star,"F_ESC10":fesc_10, 
-                  "t_STAR":t_star, "M_TURN":Mturn, "L_X":L_X},
+    astro_params={"R_BUBBLE_MAX":r_bubble, "HII_EFF_FACTOR":eta,"ION_Tvir_MIN":Tvir},
     cosmo_params=p21c.CosmoParams(),
     random_seed=seed,
     )
