@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 def simulator(sampler, z, box_dim, nruns, kbins, seed=np.random.seed(), SAVE=True, PLOT=False, dir='/home/ppxjf3/repos/RED_EMU/src/RED_EMU/make_data/'):
     save_labels = pd.DataFrame()
-    save_data = np.zeros([nruns,kbins])
+    save_data = np.zeros([nruns,2,kbins])
 
     for ii in range(0,nruns):
         
@@ -23,7 +23,7 @@ def simulator(sampler, z, box_dim, nruns, kbins, seed=np.random.seed(), SAVE=Tru
             plt.savefig("/home/ppxjf3/repos/RED_EMU/test_Tb.pdf")
         #run power spectra
         ps, k = make_power_spectra(delta_Tb, box_dim, z, kbins=kbins)
-        save_data[ii,:] = ps
+        save_data[ii,:,:] = [ps,k]
         
     if SAVE == True:
         np.save(dir+'dataset/training_data', save_data)
