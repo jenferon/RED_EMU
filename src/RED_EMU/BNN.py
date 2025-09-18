@@ -4,9 +4,11 @@ from pyro.nn import PyroModule, PyroSample
 import torch.nn as nn
 import numpy as np
 import pandas as pd
+import torch
+from pyro.infer import MCMC, NUTS
 
 class BNN21(PyroModule):
-    def __init__(self, in_dim=3, out_dim=1, hid_dim=5, prior_scale=10.):
+    def __init__(self, in_dim=1, out_dim=10, hid_dim=5, prior_scale=10.):
         """
         Class for a Bayesian Neural Network
         
@@ -44,10 +46,10 @@ if __name__ == "__main__":
     X = np.load('/home/ppxjf3/repos/RED_EMU/src/RED_EMU/make_data/dataset/training_data.npy')[:,0] #we want in shape (itter,kbins)
     print(X.shape)    
     y = pd.read_csv('/home/ppxjf3/repos/RED_EMU/src/RED_EMU/make_data/dataset/training_labels.csv')
-    y_train = np.zeros([100,3]) #labels need to be in shape
+    y_train = np.zeros([100,1]) #labels need to be in shape
     y_train[:,0] = y['R_bubble']
-    y_train[:,1] = y['Ionising_effciency']
-    y_train[:,2] = y['T_vir(min)']
+    """y_train[:,1] = y['Ionising_effciency']
+    y_train[:,2] = y['T_vir(min)']"""
     # Convert data to PyTorch tensors
     x_train = torch.from_numpy(X).float()
     y_train = torch.from_numpy(y_train).float()
