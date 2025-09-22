@@ -7,6 +7,7 @@ maintainers = [{ "name" = "Jen Feron"}]
 
 description = 'This a 21cm power spectrum emulator which fully incorporated redshift space distortions.'
 dependencies = [
+	"libomp",
 	"21cmfast",
 	"tools21cm"
 ]
