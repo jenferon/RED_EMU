@@ -9,7 +9,7 @@ def simulator(sampler, z, box_dim, nruns, kbins=7, seed=np.random.seed(), SAVE=T
     save_labels = pd.DataFrame()
     save_data = np.zeros([nruns,2,kbins])
     idx=0
-    for ii in range(0,nruns):
+    for ii in range(0,nruns-1):
         is_zero = True
         while is_zero == True:
             #make lightcone
