@@ -1,27 +1,35 @@
 import numpy as np
-from RED_EMU.make_data.make_lightcones import run_lightcone, make_power_spectra
+import py21cmfast as p21c
+from RED_EMU.make_data.make_lightcones import make_power_spectra
 from RED_EMU.make_data.data_generator import simulator 
 
 def test_simulator():
-    fstar_10 = 0.01
-    fstar10_bounds = [0.01,0.01]
-    zmin=6.0
-    zmax=6.5
-    alpha_star = 1.0
-    alpha_star_bounds = [1.0,1.0]
-    box_dim = 128
-    kbins = 10
+    r_bubble = 1.12
+    eta = 5
+    Tvir = 4
+    box_dim = 200
+    z=7.0
     
 
-    lightcone = run_lightcone(fstar_10=np.log10(fstar_10), alpha_star=alpha_star, fesc_10=-1.0, 
-                                alpha_esc=-0.5, t_star=0.5, Mturn=8.7, L_X=40.5, 
-                                seed=4, zmin=zmin, zmax=zmax, box_dim=box_dim)
-    delta_Tb = lightcone.brightness_temp 
-    print(delta_Tb.shape)
+    delta_Tb = p21c.run_coeval(
+    redshift=z,
+    user_params=p21c.UserParams(
+        BOX_LEN=box_dim,
+        HII_DIM=128,
+        DIM=int(128 * 2),
+    ),
+    astro_params={"R_BUBBLE_MAX":r_bubble, "HII_EFF_FACTOR":eta,"ION_Tvir_MIN":Tvir},
+    cosmo_params=p21c.CosmoParams(),
+    random_seed=42,
+    ).brightness_temp 
         
     #run power spectra
-    ps, k = make_power_spectra(delta_Tb, box_dim, zmin, zmax, kbins=kbins)
-    print(ps)
-    ps_test = simulator(fstar10_bounds, alpha_star_bounds, zmin, zmax, box_dim, 1, kbins, seed=4)
+    ps, k = make_power_spectra(delta_Tb)
+    samples = np.empty([1,3])
+    samples[0,0] = r_bubble
+    samples[0,1] = eta
+    samples[0,2] = Tvir
+    ps_test, k = simulator(samples, 7, box_dim, 1, seed=42, SAVE=False, PLOT=False)
     print(ps_test)
+    print(ps)
     assert(np.allclose(ps_test, ps, rtol=1e-6, atol=1e-8))
